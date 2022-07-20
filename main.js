@@ -9,14 +9,6 @@ const closeModal = () => {
 }
 
 
-
-const tempClient = {
-  nome: "michely",
-  email: "michely@gmail.com",
-  celular: "1111-1111",
-  cidade: "Recife"
-}
-
 const getLocalStorage = () => JSON.parse(localStorage.getItem('db_client')) ?? []
 const setLocalStorage = (dbClient) => localStorage.setItem("db_client", JSON.stringify(dbClient))
 
@@ -60,10 +52,39 @@ const saveClient = () => {
       cidade: document.getElementById("cidade").value,
     }
     createClient(client)
-    clearFields()
+    // clearFields()
+    updateTable()
     closeModal()
   }
 }
+
+const createRow = (client, index) => {
+  const newRow = document.createElement('tr')
+  newRow.innerHTML = `
+      <td>${client.nome}</td>
+      <td>${client.email}</td>
+      <td>${client.celular}</td>
+      <td>${client.cidade}</td>
+      <td>
+          <button type="button" class="button green" id="edit-${index}">Editar</button>
+          <button type="button" class="button red" id="delete-${index}" >Excluir</button>
+      </td>
+  `
+  document.querySelector("#tableClient>tbody").appendChild(newRow)
+}
+
+const clearTable = () => {
+  const rows = document.querySelectorAll("#tableClient>tbody tr")
+  rows.forEach(row => row.parentNode.removeChild(row))
+}
+
+const updateTable = () => {
+  const dbClient = readClient();
+  clearTable();
+  dbClient.forEach(createRow)
+}
+
+updateTable()
 
 // eventos 
 document.getElementById('cadastrarCliente')
