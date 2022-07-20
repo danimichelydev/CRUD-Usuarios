@@ -52,14 +52,13 @@ const saveClient = () => {
       cidade: document.getElementById("cidade").value,
     }
     createClient(client)
-    // clearFields()
     updateTable()
     closeModal()
   }
 }
 
 const createRow = (client, index) => {
-  const newRow = document.createElement('tr')
+  const newRow = document.createElement("tr")
   newRow.innerHTML = `
       <td>${client.nome}</td>
       <td>${client.email}</td>
@@ -84,6 +83,33 @@ const updateTable = () => {
   dbClient.forEach(createRow)
 }
 
+const fillFields = (client) => {
+  document.getElementById("nome").value = client.nome
+  document.getElementById("email").value = client.email
+  document.getElementById("celular").value = client.celular
+  document.getElementById("cidade").value = client.cidade
+}
+
+const editClient = (index) => {
+  const client = readClient()[index]
+  fillFields(client)
+  openModal()
+}
+
+
+const editDelete = (event) => {
+  if(event.target.type == "button"){
+    const [action, index] = event.target.id.split("-")
+
+    if(action == "edit"){
+      editClient(index)
+    } else{
+      console.log("Deletando cliente");
+    }
+
+  }
+}
+
 updateTable()
 
 // eventos 
@@ -95,3 +121,6 @@ document.getElementById('modalClose')
 
 document.getElementById("salvar")
   .addEventListener("click", saveClient)
+
+document.querySelector("#tableClient>tbody")
+  .addEventListener("click", editDelete)
